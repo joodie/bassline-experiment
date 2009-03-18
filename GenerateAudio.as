@@ -8,6 +8,7 @@ package {
 
 
     public class GenerateAudio extends Sprite {
+
 	private var sound:Sound = new Sound()
 	private var playing:Boolean = false
 	private var osc:Oscillator = new Oscillator();
@@ -21,12 +22,24 @@ package {
 	    seq.note2[0] = 660.0
 	    seq.note3[0] = 550.0
 	    seq.trigger = clock.output
-	    clock.frequency[0] = 30.0
+	    clock.frequency[0] = 8.0
 
-	    var button:ToggleButton = new ToggleButton(0,0xa00000)
+	    var button:ToggleButton = new ToggleButton("POW",false,0x700000,0xf00000)
+	    button.x = 10
+	    button.y = 0
 	    addChild(button)
-	    button.addEventListener(MouseEvent.MOUSE_DOWN, function():void { playing = true } )
-	    button.addEventListener(MouseEvent.MOUSE_UP, function():void { playing = false })
+	    button.onOn = function():void { playing = true }
+	    button.onOff = function():void { playing = false }
+
+	    var dial:DialButton = new DialButton(8,0.5,20,0x404040)
+	    dial.x = 30
+	    dial.y = 0
+	    addChild(dial)
+	    dial.onChange = function(value:Number):void {
+		clock.frequency[0] = value
+	    }
+	    
+
 	    sound.addEventListener(SampleDataEvent.SAMPLE_DATA,generateSound)
 
 	    sound.play()
@@ -52,67 +65,13 @@ package {
     }
 }
 
-import flash.display.DisplayObject;
-import flash.display.Shape;
-import flash.display.SimpleButton;
-
 
 // shorthand to create new sample vectors
 function buffer():Vector.<Number> {
     return new Vector.<Number>(4000,true)
 }
 
-class ToggleButton extends SimpleButton {
-    public function ToggleButton(upcolor:uint,downcolor:uint) {
-        downState      = new ButtonDisplayState(0xa0a0a0, downcolor)
-        overState      = new ButtonDisplayState(0xa0a0a0, 0x404040)
-        upState        = new ButtonDisplayState(0xa0a0a0, upcolor)
-        hitTestState   = downState
-        useHandCursor  = true;
-    }
-}
-
-
-class ButtonDisplayState extends Shape {
-    private var bgColor:uint
-    private var fillColor:uint
-    private var outlineColor:uint=0
-    private var size:uint = 10
-
-    public function ButtonDisplayState(bgColor:uint, fillColor:uint) {
-        this.bgColor = bgColor;
-	this.fillColor = fillColor
-        draw();
-    }
-
-    private function draw():void {
-        graphics.beginFill(bgColor);
-	graphics.drawRect(0,0,size,size)
-
-	graphics.beginFill(fillColor)
-	graphics.moveTo(size*.25,0)
-	graphics.lineTo(size*.75,0)
-	graphics.curveTo(size, 0,size,2*size*.25)
-	graphics.lineTo(size,2*size*.75)
-	graphics.curveTo(size, 2*size,size*.75,2*size)
-	graphics.lineTo(size*.25,2*size)
-	graphics.curveTo(0, 2*size,0,2*size*.75)
-        graphics.lineTo(0,2*size*.25);
-	graphics.curveTo(0, 0,size*0.25,0)
-	graphics.endFill()
-
-	graphics.lineStyle(2,outlineColor,1.0)
-	graphics.moveTo(size*.25,0)
-	graphics.lineTo(size*.75,0)
-	graphics.curveTo(size, 0,size,2*size*.25)
-	graphics.lineTo(size,2*size*.75)
-	graphics.curveTo(size, 2*size,size*.75,2*size)
-	graphics.lineTo(size*.25,2*size)
-	graphics.curveTo(0, 2*size,0,2*size*.75)
-        graphics.lineTo(0,2*size*.25);
-	graphics.curveTo(0, 0,size*0.25,0)
-    }
-}
+include "gui.as"
 
 class Oscillator {
     public var output:Vector.<Number> = buffer();
