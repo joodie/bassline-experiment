@@ -109,7 +109,7 @@ class DialButton extends Sprite {
     private var max:Number
     private var color:uint
 
-    public function DialButton(startValue:Number,min:Number,max:Number,color:uint) {
+    public function DialButton(startValue:Number,min:Number,max:Number,color:uint=0xe0e0e0) {
 	this.min = min
 	this.max = max
 	buttonMode = false
@@ -131,13 +131,13 @@ class DialButton extends Sprite {
 
 
 	var y:int = 0
-	var drag:Function = function (event:MouseEvent):void {
-	    value = Math.min(max,Math.max(min,min + ((y - event.stageY) * (max - min) / 50)))
+	function drag(event:MouseEvent):void {
+	    var delta:Number = ((y - event.stageY) * (max - min) / 100)
+	    
+	    value = Math.min(max,Math.max(min,value + delta))
 	    if (onChange != null) onChange(value)
 	    updateDisplay()
 	}
-
-
 
 	function upevent(event:MouseEvent):void { 
 	    root.removeEventListener(MouseEvent.MOUSE_MOVE,drag)

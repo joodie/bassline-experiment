@@ -31,7 +31,7 @@ package {
 	    button.onOn = function():void { playing = true }
 	    button.onOff = function():void { playing = false }
 
-	    var dial:DialButton = new DialButton(8,0.5,20,0x404040)
+	    var dial:DialButton = new DialButton(20,0.5,20,0xd0d0d0)
 	    dial.x = 30
 	    dial.y = 0
 	    addChild(dial)
