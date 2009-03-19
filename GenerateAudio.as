@@ -16,6 +16,8 @@ package {
 	private var accent:Sequencer = new Sequencer()
 	private var accentDecay:Decay = new Decay()
 	private var accentAmp:MultiplyAA = new MultiplyAA()
+	private var accentStrength:MultiplyCA = new MultiplyCA()
+
 	private var accentAdd:AddAA = new AddAA()
 	private var slide:Sequencer = new Sequencer()
 	private var clock:Clock = new Clock()
@@ -42,12 +44,9 @@ package {
 	    seq.note3[0] = 550.0
 	    seq.trigger = clock.output
 	    clock.frequency[0] = 8.0
-	    envMod.inputA = decay.output
-	    envMod.inputC[0] = 0.0
-	    envModAdd.input1 = envMod.output
-	    envModAdd.input2 = interpolateF.output
-	    filter.frequency = envModAdd.output
 
+
+	    accent.trigger = clock.output
 	    accent.note0[0] = 0.0
 	    accent.note1[0] = 0.0
 	    accent.note2[0] = 0.0
@@ -55,8 +54,17 @@ package {
 	    accentAmp.input1 = accent.output
 	    accentAmp.input2 = clock.output
 	    accentDecay.trigger = accentAmp.output
-	    accentDecay.decay[0] = 0.99
-	    accentAdd.input1 = accentDecay.output
+	    accentDecay.decay[0] = 0.999
+	    accentStrength.inputA = accentDecay.output
+	    accentStrength.inputC[0] = 0.5
+
+	    envMod.inputA = accentStrength.output
+	    envMod.inputC[0] = 0.0
+	    envModAdd.input1 = envMod.output
+	    envModAdd.input2 = interpolateF.output
+	    filter.frequency = envModAdd.output
+
+	    accentAdd.input1 = accentStrength.output
 	    accentAdd.input2 = decay.output
 	    amp.input1 = accentAdd.output
 	    amp.input2 = filter.output
@@ -168,6 +176,13 @@ package {
 		envMod.inputC[0] = value
 	    }	    
 
+	    var dialAcc:DialButton = new DialButton("Acc",0.5,0.2,4.0)
+	    dialAcc.x = 260
+	    dialAcc.y = 25
+	    addChild(dialAcc)
+	    dialAcc.onChange = function(value:Number):void {
+		accentStrength.inputC[0] = value
+	    }	    
 	    addChild(debug)
 
 	    sound.addEventListener(SampleDataEvent.SAMPLE_DATA,generateSound)
@@ -185,7 +200,9 @@ package {
 		accent.run(2048)
 		accentAmp.run(2048)
 		accentDecay.run(2048)
+		accentStrength.run(2048)
 		accentAdd.run(2048)
+
 
 		envMod.run(2048)
 		envModAdd.run(2048)
@@ -194,13 +211,13 @@ package {
 
 		amp.run(2048)
 		for ( var c:int=0; c<2048; c++ ) {
-		    event.data.writeFloat(accentAmp.output[c]);
+		    event.data.writeFloat(amp.output[c])
 		    event.data.writeFloat(amp.output[c])
 		}
 		for (var i:int=0; i < 4; i++) {
 		    indicators[i].setValue(i == seq.step)
 		}
-		debug.text = accent.output[0].toString()
+		debug.text = accentDecay.output[0]+ " " +accentStrength.output[0].toString()
 	    }
 	    else {
 		for ( c=0; c<2090; c++ ) {

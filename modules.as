@@ -124,10 +124,12 @@ class SimpleResonantFilter {
     private var buf0:Number = 0.0
     private var buf1:Number = 0.0
     public function run(frames:uint):void {
-	var fb:Number = q[0] + q[0] / (1.0 - frequency[0])
 	for (var i:uint = 0; i < frames; i++) {
-	    buf0 = buf0 + frequency[0] * (input[i] - buf0 + fb * (buf0 - buf1))
-	    output[i] = buf1 = buf1 + frequency[0] * (buf0 - buf1)
+	    var f:Number =  Math.min(0.5,frequency[i])
+	    var qq:Number = Math.min(0.95,q[i])
+	    var fb:Number = qq + qq / (1.0 - f)
+	    buf0 = buf0 + f * (input[i] - buf0 + fb * (buf0 - buf1))
+	    output[i] = buf1 = buf1 + f * (buf0 - buf1)
 	}	
     }
 }
