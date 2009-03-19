@@ -28,6 +28,8 @@ package {
 	private var amp:MultiplyAA = new MultiplyAA()
 	private var envMod:MultiplyCA = new MultiplyCA()
 	private var envModAdd:AddAA = new AddAA()
+	private var volume:MultiplyCA = new MultiplyCA()
+
 	private var indicators:Array = []
 	private var vumeter:VUMeter = new VUMeter()
 
@@ -69,6 +71,9 @@ package {
 	    accentAdd.input2 = decay.output
 	    amp.input1 = accentAdd.output
 	    amp.input2 = filter.output
+
+	    volume.inputA = amp.output
+	    volume.inputC[0] = 0.5
 
 	    var button:ToggleButton = new ToggleButton("POW",false,0x700000,0xf00000)
 	    button.x = 10
@@ -185,6 +190,15 @@ package {
 		accentStrength.inputC[0] = value
 	    }
 
+	    var dialVol:DialButton = new DialButton("Vol",0.5,0.0,1.0)
+	    dialVol.x = 185
+	    dialVol.y = 0
+	    addChild(dialVol)
+	    dialVol.onChange = function(value:Number):void {
+		volume.inputC[0] = value
+	    }
+
+
 	    vumeter.x = 10
 	    vumeter.y = 25
 	    addChild(vumeter)
@@ -208,22 +222,22 @@ package {
 		accentDecay.run(2048)
 		accentStrength.run(2048)
 		accentAdd.run(2048)
-
-
 		envMod.run(2048)
 		envModAdd.run(2048)
 		interpolateQ.run(2048)
 		filter.run(2048)
-
 		amp.run(2048)
+		volume.run(2048)
+
 		for ( var c:int=0; c<2048; c++ ) {
-		    event.data.writeFloat(amp.output[c])
-		    event.data.writeFloat(amp.output[c])
+		    var out:Number = Math.min(1.0,volume.output[c])
+		    event.data.writeFloat(out)
+		    event.data.writeFloat(out)
 		}
 		for (var i:int=0; i < 4; i++) {
 		    indicators[i].setValue(i == seq.step)
 		}
-		vumeter.setValue(amp.output[0])
+		vumeter.setValue(volume.output[0])
 	    }
 	    else {
 		for ( c=0; c<2090; c++ ) {
