@@ -13,6 +13,8 @@ buttonTextFormat.color = 0xffffff
 buttonTextFormat.size = 5
 buttonTextFormat.bold = true
 
+var knobs:Array = []
+
 function drawRoundedRectangle(graphics:flash.display.Graphics,color:uint,alpha:Number,x1:Number,y1:Number,x2:Number,y2:Number,rounded:Number = 2.0):void {
     with (graphics) {
 	lineStyle(1,0)
@@ -82,6 +84,7 @@ class ToggleButton extends Sprite {
 	updateState()
 	addChild(onState)
 	addChild(offState)
+	knobs.push(this)
     }
 
     public function setValue(val:Boolean):void {
@@ -119,6 +122,9 @@ class ToggleButton extends Sprite {
 	    curveTo(size*.80,size*.80,size*.5,size*.80)
 	}
 	return sp
+    }
+    public function randomize():void {
+	setValue(Math.random() < 0.5)
     }
 }
 
@@ -159,12 +165,7 @@ class DialButton extends Sprite {
 	var y:Number = 0.0
 	function drag(event:MouseEvent):void {
 	    var delta:Number = ((event.stageY - y) * (max - min)) / 100
-	    
-	    value = Math.min(max,Math.max(min,value - delta))
-	    if (onChange != null) onChange(value)
-
-
-	    updateDisplay()
+	    setValue(Math.min(max,Math.max(min,value - delta)))
 	}
 
 	function upevent(event:MouseEvent):void { 
@@ -178,12 +179,23 @@ class DialButton extends Sprite {
 		root.addEventListener(MouseEvent.MOUSE_MOVE,drag)
 		root.addEventListener(MouseEvent.MOUSE_UP, upevent)
 	    })
+	knobs.push(this)
+    }
 
+    public function setValue(val:Number):void {
+	value = val
+	if (onChange != null) onChange(value)
+	updateDisplay()
     }
 
     private function updateDisplay():void {
 	shape.rotation = (value-min)* (320/(max - min)) - 160
     }
+
+    public function randomize():void {
+	setValue(Math.random() * (max - min) + min)
+    }
+
 }
 
 class VUMeter extends Sprite {

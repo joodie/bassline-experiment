@@ -300,7 +300,6 @@ class Bassline {
 	seq.note2[0] = 660.0
 	seq.note3[0] = 550.0
 	seq.trigger = clock.output
-
 	
 	accent.trigger = clock.output
 	accent.note0[0] = 0.0
