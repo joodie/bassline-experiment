@@ -24,7 +24,6 @@ package {
 	    addChild(bg)
 
 
-
 	    var label:TextField = new TextField()
 	    label.defaultTextFormat = titleTextFormat
 	    label.width = 195
