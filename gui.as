@@ -13,6 +13,38 @@ buttonTextFormat.color = 0xffffff
 buttonTextFormat.size = 5
 buttonTextFormat.bold = true
 
+
+function drawRoundedRectangle(graphics:flash.display.Graphics,color:uint,alpha:Number,x1:Number,y1:Number,x2:Number,y2:Number,rounded:Number = 2.0):void {
+    with (graphics) {
+	lineStyle(1,0)
+	beginFill(color,alpha)
+	moveTo(x1+rounded,y1)
+	lineTo(x2-rounded,y1)
+	curveTo(x2,y1,x2,x1+rounded)
+	lineTo(x2,y2-rounded)
+	curveTo(x2,y2,x2-rounded,y2)
+	lineTo(x1+rounded,y2)
+	curveTo(x1,y2,x1,y2-rounded)
+	lineTo(x1,y1+rounded)
+	curveTo(x1,y1,x1+rounded,y1)
+	endFill()
+    }
+}
+
+function drawLabel(sprite:Sprite, text:String, color:uint=0xffffff,bgcolor:uint=0xd0d0d0, bgalpha:Number=0.5):void {
+    drawRoundedRectangle(sprite.graphics, bgcolor, bgalpha,0,0,20,20)
+    var label:TextField = new TextField()
+    label.selectable = false
+    label.defaultTextFormat = buttonTextFormat
+    label.width = 1
+    label.autoSize = TextFieldAutoSize.LEFT
+    label.text = text
+    label.y = 10
+    sprite.addChild(label)
+    label.x = (20.0 - label.textWidth) / 2.0 - 1.7
+}
+
+
 class ToggleButton extends Sprite {
     public var onState:Shape
     public var offState:Shape
@@ -23,36 +55,13 @@ class ToggleButton extends Sprite {
     public function ToggleButton(text:String,startState:Boolean,upcolor:uint,downcolor:uint,bgcolor:uint = 0xd0d0d0,bgalpha:Number=0.5) {
 	buttonMode = true
         useHandCursor  = true
-
-	if (bgalpha > 0.0) {
-	    with (graphics) {
-		beginFill(bgcolor,bgalpha)
-		moveTo(2,0)
-		lineTo(18,0)
-		curveTo(20,0,20,2)
-		lineTo(20,18)
-		curveTo(20,20,18,20)
-		lineTo(2,20)
-		curveTo(0,20,0,18)
-		lineTo(0,2)
-		curveTo(0,0,2,0)
-		endFill()
-	    }
-	}
+	drawLabel(this, text, 0xffffff,bgcolor, bgalpha)
 
 	onState = createShape(10,0, downcolor)
 	offState = createShape(10,0, upcolor)
 	onState.y = offState.y = 2
 	onState.x = offState.x = 5
-	var label:TextField = new TextField()
-	label.selectable = false
-	label.defaultTextFormat = buttonTextFormat
-	label.width = 20
-	label.autoSize = TextFieldAutoSize.CENTER
-	label.text = text
-	label.y = 10
-	label.x = 1.5
-	addChild(label)
+
 	state = startState
 
 
@@ -109,11 +118,16 @@ class DialButton extends Sprite {
     private var max:Number
     private var color:uint
 
-    public function DialButton(startValue:Number,min:Number,max:Number,color:uint=0xe0e0e0) {
+    public function DialButton(text:String,startValue:Number,min:Number,max:Number,color:uint=0xd0d0d0) {
 	this.min = min
 	this.max = max
 	buttonMode = false
 	value = startValue
+
+	drawLabel(this, text)
+	
+	// shape is the dialing part of the graphics:
+	// the value is indicated by rotating shape
 	with (shape.graphics) {
 	    clear()
 	    rotation = 0
@@ -124,17 +138,17 @@ class DialButton extends Sprite {
 	    moveTo(0,-5)
 	    lineTo(0,-1)
 	}
-	shape.x = 5
-	shape.y = 5
+	shape.x = 10
+	shape.y = 7
 	updateDisplay()
 	addChild(shape)
 
 
-	var y:int = 0
+	var y:Number = 0.0
 	function drag(event:MouseEvent):void {
-	    var delta:Number = ((y - event.stageY) * (max - min) / 100)
+	    var delta:Number = ((event.stageY - y) * (max - min)) / 100
 	    
-	    value = Math.min(max,Math.max(min,value + delta))
+	    value = Math.min(max,Math.max(min,value - delta))
 	    if (onChange != null) onChange(value)
 	    updateDisplay()
 	}
