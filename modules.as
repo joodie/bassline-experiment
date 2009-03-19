@@ -39,6 +39,19 @@ class Sequencer {
     public var note1:Vector.<Number> = buffer()
     public var note2:Vector.<Number> = buffer()
     public var note3:Vector.<Number> = buffer()
+    public var note4:Vector.<Number> = buffer()
+    public var note5:Vector.<Number> = buffer()
+    public var note6:Vector.<Number> = buffer()
+    public var note7:Vector.<Number> = buffer()
+    public var note8:Vector.<Number> = buffer()
+    public var note9:Vector.<Number> = buffer()
+    public var note10:Vector.<Number> = buffer()
+    public var note11:Vector.<Number> = buffer()
+    public var note12:Vector.<Number> = buffer()
+    public var note13:Vector.<Number> = buffer()
+    public var note14:Vector.<Number> = buffer()
+    public var note15:Vector.<Number> = buffer()
+
     public var triggerOut:Vector.<Number> = buffer()
     public var step:uint = 0;
     private var trigHigh:Boolean = true
@@ -47,7 +60,7 @@ class Sequencer {
 	for (var i:uint = 0; i < frames; i++) {
 	    if (trigger[i] > 0.5) {
 		if (!trigHigh) {
-		    if (++step > 3) step -= 4
+		    if (++step > 15) step -= 16
 		    trigHigh = true
 		}
 	    }
@@ -66,6 +79,42 @@ class Sequencer {
 		break
 		case 3: 
 		  this.output[i] = this.note3[0]
+		break
+		case 4: 
+		  this.output[i] = this.note4[0]
+		break
+		case 5: 
+		  this.output[i] = this.note5[0]
+		break
+		case 6: 
+		  this.output[i] = this.note6[0]
+		break
+		case 7: 
+		  this.output[i] = this.note7[0]
+		break
+		case 8: 
+		  this.output[i] = this.note8[0]
+		break
+		case 9: 
+		  this.output[i] = this.note9[0]
+		break
+		case 10: 
+		  this.output[i] = this.note10[0]
+		break
+		case 11: 
+		  this.output[i] = this.note11[0]
+		break
+		case 12: 
+		  this.output[i] = this.note12[0]
+		break
+		case 13: 
+		  this.output[i] = this.note13[0]
+		break
+		case 14: 
+		  this.output[i] = this.note14[0]
+		break
+		case 15: 
+		  this.output[i] = this.note15[0]
 		break
 	    }
 	    if (output[i] == -1.0) {

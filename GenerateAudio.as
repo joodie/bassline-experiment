@@ -98,7 +98,7 @@ package {
 		glider.frequency[0] = value / 2
 	    }
 
-	    for (var i:int = 0; i < 4; i++) {
+	    for (var i:int = 0; i < 16; i++) {
 		
 
 		var b:DialButton = new DialButton("F#"+i,Math.round(Math.random()*128),-1.0,127.0,0x00dddd)
@@ -242,7 +242,7 @@ package {
 		    event.data.writeFloat(out)
 		    event.data.writeFloat(out)
 		}
-		for (var i:int=0; i < 4; i++) {
+		for (var i:int=0; i < 16; i++) {
 		    indicators[i].setValue(i == seq.step)
 		}
 		vumeter.setValue(avg/2048)
