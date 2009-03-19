@@ -235,15 +235,17 @@ package {
 		amp.run(2048)
 		volume.run(2048)
 
+		var avg:Number = 0.0
 		for ( var c:int=0; c<2048; c++ ) {
 		    var out:Number = Math.min(1.0,volume.output[c])
+		    avg += Math.abs(out)
 		    event.data.writeFloat(out)
 		    event.data.writeFloat(out)
 		}
 		for (var i:int=0; i < 4; i++) {
 		    indicators[i].setValue(i == seq.step)
 		}
-		vumeter.setValue(volume.output[0])
+		vumeter.setValue(avg/2048)
 	    }
 	    else {
 		for ( c=0; c<2090; c++ ) {

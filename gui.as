@@ -19,7 +19,7 @@ function drawRoundedRectangle(graphics:flash.display.Graphics,color:uint,alpha:N
 	beginFill(color,alpha)
 	moveTo(x1+rounded,y1)
 	lineTo(x2-rounded,y1)
-	curveTo(x2,y1,x2,x1+rounded)
+	curveTo(x2,y1,x2,y1+rounded)
 	lineTo(x2,y2-rounded)
 	curveTo(x2,y2,x2-rounded,y2)
 	lineTo(x1+rounded,y2)
@@ -206,6 +206,6 @@ class VUMeter extends Sprite {
 	else {
 	    color = 0xff0000
 	}
-	drawRoundedRectangle(indicator.graphics, color, 1, 4,4,16,8 + (val * 108))
+	drawRoundedRectangle(indicator.graphics, color, 1, 4,8 + (1 - val) * 108,16,116)
     }
 }
