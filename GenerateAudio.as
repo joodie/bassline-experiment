@@ -13,6 +13,10 @@ package {
 	private var playing:Boolean = false
 	private var osc:Oscillator = new Oscillator()
 	private var seq:Sequencer = new Sequencer()
+	private var accent:Sequencer = new Sequencer()
+	private var accentDecay:Decay = new Decay()
+	private var accentAmp:MultiplyAA = new MultiplyAA()
+	private var accentAdd:AddAA = new AddAA()
 	private var slide:Sequencer = new Sequencer()
 	private var clock:Clock = new Clock()
 	private var decay:Decay = new Decay()
@@ -25,8 +29,6 @@ package {
 	private var indicators:Array = []
 
 	public function GenerateAudio() {
-	    amp.input1 = filter.output
-	    amp.input2 = decay.output
 	    filter.input = osc.output
 	    filter.q = interpolateQ.output
 	    interpolateF.input[0] = 0.4
@@ -45,6 +47,19 @@ package {
 	    envModAdd.input1 = envMod.output
 	    envModAdd.input2 = interpolateF.output
 	    filter.frequency = envModAdd.output
+
+	    accent.note0[0] = 0.0
+	    accent.note1[0] = 0.0
+	    accent.note2[0] = 0.0
+	    accent.note3[0] = 0.0
+	    accentAmp.input1 = accent.output
+	    accentAmp.input2 = clock.output
+	    accentDecay.trigger = accentAmp.output
+	    accentDecay.decay[0] = 0.99
+	    accentAdd.input1 = accentDecay.output
+	    accentAdd.input2 = decay.output
+	    amp.input1 = accentAdd.output
+	    amp.input2 = filter.output
 
 	    var button:ToggleButton = new ToggleButton("POW",false,0x700000,0xf00000)
 	    button.x = 10
@@ -65,6 +80,8 @@ package {
 	    }
 
 	    for (var i:int = 0; i < 4; i++) {
+		
+
 		var b:DialButton = new DialButton("F#"+i,Math.round(Math.random()*128),-1.0,127.0,0x00dddd)
 		b.x = 60 + 25 * i
 		b.y = 25
@@ -72,26 +89,44 @@ package {
 		b.onChange = (function(ii:int):Function {
 			return function(value:Number):void {
 			    var index:uint = Math.round(value)
-			    seq["note"+ii][0] = index == -1 ? 0.0 : MIDI_NOTES[index]
+			    seq["note"+ii][0] = index == -1 ? -1.0 : MIDI_NOTES[index]
 			}
 		    }
 		)(i)
-		var tb:ToggleButton = new ToggleButton("Glide",false,0x700000,0xf00000)
+		var tb:ToggleButton = new ToggleButton("Acc",false,0x700000,0xf00000)
 		tb.x = 60 + 25 * i
 		tb.y = 50
 		addChild(tb)
 		tb.onOn = (function(ii:int):Function {
 			return function():void {
-			    slide["note"+ii][0] = 0.0
+			    accent["note"+ii][0] = 1.0
 			}
 		    }
 		)(i)
 		tb.onOff = (function(ii:int):Function {
 			return function():void {
+			    accent["note"+ii][0] = 0.0
+			}
+		    }
+		)(i)
+
+		tb = new ToggleButton("Glide",false,0x700000,0xf00000)
+		tb.x = 60 + 25 * i
+		tb.y = 75
+		addChild(tb)
+		tb.onOn = (function(ii:int):Function {
+			return function():void {
 			    slide["note"+ii][0] = 1.0
 			}
 		    }
 		)(i)
+		tb.onOff = (function(ii:int):Function {
+			return function():void {
+			    slide["note"+ii][0] = 0.0
+			}
+		    }
+		)(i)
+
 
 		tb = new ToggleButton(i.toString(),false,0x007000,0x00f000,0)
 		tb.x = 60 + 25 * i
@@ -147,6 +182,11 @@ package {
 		osc.run(2048)
 		interpolateF.run(2048)
 		decay.run(2048)
+		accent.run(2048)
+		accentAmp.run(2048)
+		accentDecay.run(2048)
+		accentAdd.run(2048)
+
 		envMod.run(2048)
 		envModAdd.run(2048)
 		interpolateQ.run(2048)
@@ -154,19 +194,20 @@ package {
 
 		amp.run(2048)
 		for ( var c:int=0; c<2048; c++ ) {
-		    event.data.writeFloat(amp.output[c]);
+		    event.data.writeFloat(accentAmp.output[c]);
 		    event.data.writeFloat(amp.output[c])
 		}
 		for (var i:int=0; i < 4; i++) {
 		    indicators[i].setValue(i == seq.step)
 		}
+		debug.text = accent.output[0].toString()
 	    }
 	    else {
 		for ( c=0; c<2090; c++ ) {
 		    event.data.writeFloat(0.0);
 		    event.data.writeFloat(0.0);
 		}
-	    } 
+	    }
 	}
     }
 }

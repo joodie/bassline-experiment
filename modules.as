@@ -68,7 +68,7 @@ class Sequencer {
 		  this.output[i] = this.note3[0]
 		break
 	    }
-	    if (output[i] == 0.0) {
+	    if (output[i] == -1.0) {
 		output[i] = lastNote
 		triggerOut[i] = 0.0
 	    }
