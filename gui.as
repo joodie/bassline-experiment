@@ -185,3 +185,27 @@ class DialButton extends Sprite {
 	shape.rotation = (value-min)* (320/(max - min)) - 160
     }
 }
+
+class VUMeter extends Sprite {
+    private var indicator:Shape = new Shape()
+    public function VUMeter() {
+	drawRoundedRectangle(graphics, 0x505050, 0.5, 0,0,20,120)
+	addChild(indicator)
+    }
+
+    public function setValue(val:Number):void {
+	indicator.graphics.clear()
+	var color:uint
+	val = Math.min(1,Math.max(0,Math.abs(val)))
+	if (val < 0.5) {
+	    color = 0xa0a000
+	}
+	else if (val < 0.8) {
+	    color = 0x00f000
+	}
+	else {
+	    color = 0xff0000
+	}
+	drawRoundedRectangle(indicator.graphics, color, 1, 4,4,16,8 + (val * 108))
+    }
+}

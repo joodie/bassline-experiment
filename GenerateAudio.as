@@ -29,6 +29,7 @@ package {
 	private var envMod:MultiplyCA = new MultiplyCA()
 	private var envModAdd:AddAA = new AddAA()
 	private var indicators:Array = []
+	private var vumeter:VUMeter = new VUMeter()
 
 	public function GenerateAudio() {
 	    filter.input = osc.output
@@ -92,7 +93,7 @@ package {
 
 		var b:DialButton = new DialButton("F#"+i,Math.round(Math.random()*128),-1.0,127.0,0x00dddd)
 		b.x = 60 + 25 * i
-		b.y = 25
+		b.y = 50
 		addChild(b)
 		b.onChange = (function(ii:int):Function {
 			return function(value:Number):void {
@@ -103,7 +104,7 @@ package {
 		)(i)
 		var tb:ToggleButton = new ToggleButton("Acc",false,0x700000,0xf00000)
 		tb.x = 60 + 25 * i
-		tb.y = 50
+		tb.y = 75
 		addChild(tb)
 		tb.onOn = (function(ii:int):Function {
 			return function():void {
@@ -120,7 +121,7 @@ package {
 
 		tb = new ToggleButton("Glide",false,0x700000,0xf00000)
 		tb.x = 60 + 25 * i
-		tb.y = 75
+		tb.y = 100
 		addChild(tb)
 		tb.onOn = (function(ii:int):Function {
 			return function():void {
@@ -138,51 +139,56 @@ package {
 
 		tb = new ToggleButton(i.toString(),false,0x007000,0x00f000,0)
 		tb.x = 60 + 25 * i
-		tb.y = 0
+		tb.y = 25
 		addChild(tb)
 		indicators.push(tb)
 	    }
 
 
 	    var dial2:DialButton = new DialButton("FRQ",0.2,0.0,0.5)
-	    dial2.x = 160
-	    dial2.y = 25
+	    dial2.x = 60
+	    dial2.y = 0
 	    addChild(dial2)
 	    dial2.onChange = function(value:Number):void {
 		interpolateF.input[0] = value
 	    }
 
 	    var dial3:DialButton = new DialButton("Q",0.2,0.0,1.0)
-	    dial3.x = 185
-	    dial3.y = 25
+	    dial3.x = 85
+	    dial3.y = 0
 	    addChild(dial3)
 	    dial3.onChange = function(value:Number):void {
 		interpolateQ.input[0] = value
 	    }
 
 	    var dial4:DialButton = new DialButton("Decay",0.888,0.0,1.0)
-	    dial4.x = 210
-	    dial4.y = 25
+	    dial4.x = 110
+	    dial4.y = 0
 	    addChild(dial4)
 	    dial4.onChange = function(value:Number):void {
 		decay.decay[0] = 1.0 - Math.pow(1.0 - (0.5 + value /4),8)
 	    }
 
 	    var dialMod:DialButton = new DialButton("Mod",0.2,0.0,1.0)
-	    dialMod.x = 235
-	    dialMod.y = 25
+	    dialMod.x = 135
+	    dialMod.y = 0
 	    addChild(dialMod)
 	    dialMod.onChange = function(value:Number):void {
 		envMod.inputC[0] = value
 	    }	    
 
 	    var dialAcc:DialButton = new DialButton("Acc",0.5,0.2,4.0)
-	    dialAcc.x = 260
-	    dialAcc.y = 25
+	    dialAcc.x = 160
+	    dialAcc.y = 0
 	    addChild(dialAcc)
 	    dialAcc.onChange = function(value:Number):void {
 		accentStrength.inputC[0] = value
-	    }	    
+	    }
+
+	    vumeter.x = 10
+	    vumeter.y = 25
+	    addChild(vumeter)
+
 	    addChild(debug)
 
 	    sound.addEventListener(SampleDataEvent.SAMPLE_DATA,generateSound)
@@ -217,7 +223,7 @@ package {
 		for (var i:int=0; i < 4; i++) {
 		    indicators[i].setValue(i == seq.step)
 		}
-		debug.text = accentDecay.output[0]+ " " +accentStrength.output[0].toString()
+		vumeter.setValue(amp.output[0])
 	    }
 	    else {
 		for ( c=0; c<2090; c++ ) {
