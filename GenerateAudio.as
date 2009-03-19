@@ -19,7 +19,9 @@ package {
 	public function GenerateAudio() {
 	    clock.frequency[0] = 8.0
 	    bassline.glider.frequency[0] = 8.0 / 2
-	    drawRoundedRectangle(graphics, 0, 0.5,0,0,440,175)
+	    var bg:Sprite = new Sprite()
+	    drawRoundedRectangle(bg.graphics, 0, 0.5,0,0,440,175)
+	    addChild(bg)
 
 
 
