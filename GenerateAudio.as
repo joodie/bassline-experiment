@@ -18,6 +18,8 @@ package {
 	private var accentAmp:MultiplyAA = new MultiplyAA()
 	private var accentStrength:MultiplyCA = new MultiplyCA()
 
+	private var glider:InterpolateAA = new InterpolateAA()
+
 	private var accentAdd:AddAA = new AddAA()
 	private var slide:Sequencer = new Sequencer()
 	private var clock:Clock = new Clock()
@@ -40,14 +42,16 @@ package {
 	    interpolateQ.input[0] = 0.4
 	    decay.trigger = seq.triggerOut
 	    decay.decay[0] = 0.99999
-	    osc.frequency = seq.output
+
+	    glider.input = seq.output
+	    osc.frequency = glider.output
 	    seq.note0[0] = 440.0
 	    seq.note1[0] = 880.0
 	    seq.note2[0] = 660.0
 	    seq.note3[0] = 550.0
 	    seq.trigger = clock.output
 	    clock.frequency[0] = 8.0
-
+	    glider.frequency[0] = 8.0 / 2
 
 	    accent.trigger = clock.output
 	    accent.note0[0] = 0.0
@@ -91,6 +95,7 @@ package {
 	    addChild(dial)
 	    dial.onChange = function(value:Number):void {
 		clock.frequency[0] = value
+		glider.frequency[0] = value / 2
 	    }
 
 	    for (var i:int = 0; i < 4; i++) {
@@ -214,6 +219,7 @@ package {
 	    if (playing) {
 		clock.run(2048)
 		seq.run(2048)
+		glider.run(2048)
 		osc.run(2048)
 		interpolateF.run(2048)
 		decay.run(2048)

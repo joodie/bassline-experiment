@@ -204,3 +204,15 @@ class Interpolate {
     }
 }
 
+class InterpolateAA {
+    public var input:Vector.<Number> = buffer()
+    public var output:Vector.<Number> = buffer()
+    public var frequency:Vector.<Number> = buffer()
+    private var buffer:Number = 0.0
+    public function run(frames:uint):void {
+	for (var i:uint = 0; i < frames; i++) {
+	    var diff:Number = input[i] - buffer
+	    buffer = output[i] = buffer + diff * 20 * frequency[0] / SAMPLE_RATE
+	}
+    }    
+}
