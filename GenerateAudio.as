@@ -51,7 +51,7 @@ package {
 	    osc.run(2048)
 	    if (playing) {
 		for ( var c:int=0; c<2048; c++ ) {
-		    event.data.writeFloat(osc.output[c]);
+		    event.data.writeFloat(clock.output[c]);
 		    event.data.writeFloat(osc.output[c]);
 		}
 	    }
@@ -73,13 +73,15 @@ function buffer():Vector.<Number> {
 
 include "gui.as"
 
+const SAMPLE_RATE:Number = 44100.0
+
 class Oscillator {
     public var output:Vector.<Number> = buffer();
     public var frequency:Vector.<Number> = buffer();
     private var phase:Number = 0.0;
 
     public function run(frames:uint):void {
-	var phaseStep:Number = this.frequency[0] / 22050.0;
+	var phaseStep:Number = this.frequency[0] / (SAMPLE_RATE / 2)
 	for (var i:uint = 0; i < frames; i++) {
 	    if (this.phase < 1.0) {
 		this.output[i] = 0.5;
@@ -140,9 +142,9 @@ class Clock {
     private var phase:Number = 0.0
     
     public function run(frames:uint):void {
-	var step:Number = frequency[0] / 44100.0
+	var step:Number = frequency[0] / SAMPLE_RATE
 	for (var i:uint = 0; i < frames; i++) {
-	    if (phase <= 0.0001) {
+	    if (phase <= 0.1) {
 		output[i] = 1.0
 	    }
 	    else {
