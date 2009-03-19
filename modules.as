@@ -256,12 +256,18 @@ class Interpolate {
 class InterpolateAA {
     public var input:Vector.<Number> = buffer()
     public var output:Vector.<Number> = buffer()
+    public var onoff:Vector.<Number> = buffer()
     public var frequency:Vector.<Number> = buffer()
     private var buffer:Number = 0.0
     public function run(frames:uint):void {
 	for (var i:uint = 0; i < frames; i++) {
-	    var diff:Number = input[i] - buffer
-	    buffer = output[i] = buffer + diff * 20 * frequency[0] / SAMPLE_RATE
+	    if (onoff[i] > 0.5) {
+		var diff:Number = input[i] - buffer
+		buffer = output[i] = buffer + diff * 20 * frequency[0] / SAMPLE_RATE
+	    }
+	    else {
+		buffer = output[i] = input[i]
+	    }
 	}
     }    
 }
@@ -288,34 +294,22 @@ class Bassline {
     public function Bassline() {
 	filter.input = osc.output
 	filter.q = interpolateQ.output
-	interpolateF.input[0] = 0.4
-	interpolateQ.input[0] = 0.4
 	decay.trigger = seq.triggerOut
-	decay.decay[0] = 0.99999
-	
 	glider.input = seq.output
+	slide.trigger = clock.output
+	glider.onoff = slide.output
 	osc.frequency = glider.output
-	seq.note0[0] = 440.0
-	seq.note1[0] = 880.0
-	seq.note2[0] = 660.0
-	seq.note3[0] = 550.0
-	seq.trigger = clock.output
 
+	seq.trigger = clock.output
 	
 	accent.trigger = clock.output
-	accent.note0[0] = 0.0
-	accent.note1[0] = 0.0
-	accent.note2[0] = 0.0
-	accent.note3[0] = 0.0
 	accentAmp.input1 = accent.output
 	accentAmp.input2 = clock.output
 	accentDecay.trigger = accentAmp.output
 	accentDecay.decay[0] = 0.999
 	accentStrength.inputA = accentDecay.output
-	accentStrength.inputC[0] = 0.5
 	
 	envMod.inputA = accentStrength.output
-	envMod.inputC[0] = 0.0
 	envModAdd.input1 = envMod.output
 	envModAdd.input2 = interpolateF.output
 	filter.frequency = envModAdd.output
@@ -326,26 +320,42 @@ class Bassline {
 	amp.input2 = filter.output
 	
 	volume.inputA = amp.output
-	volume.inputC[0] = 0.5
     }
     public function run(frames:uint):void {
 	// order is important here, as always
+
+	// sequencer parts first
 	seq.run(frames)
+	slide.run(frames)
+	accent.run(frames)
+
+	// glider/oscillator
 	glider.run(frames)
 	osc.run(frames)
-	interpolateF.run(frames)
+
+	// decay & accent (both used in envmod)
 	decay.run(frames)
-	accent.run(frames)
 	accentAmp.run(frames)
 	accentDecay.run(frames)
 	accentStrength.run(frames)
 	accentAdd.run(frames)
+
+	// envmod
 	envMod.run(frames)
 	envModAdd.run(frames)
+
+	// lowpass filter
+	interpolateF.run(frames)
 	interpolateQ.run(frames)
 	filter.run(frames)
+
+	// amplitude / volume
 	amp.run(frames)
 	volume.run(frames)
     }
+}
 
+
+class Drums {
+    
 }

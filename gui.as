@@ -209,6 +209,7 @@ class VUMeter extends Sprite {
 	indicator.graphics.clear()
 	var color:uint
 	val = Math.min(1,Math.max(0,Math.abs(val)))
+	if (val * 108 < 8) return;
 	if (val < 0.5) {
 	    color = 0xa0a000
 	}

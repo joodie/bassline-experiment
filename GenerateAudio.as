@@ -37,7 +37,7 @@ package {
 	    }
 
 	    for (var i:int = 0; i < 16; i++) {
-		var b:DialButton = new DialButton("F#"+i,Math.round(Math.random()*128),-1.0,127.0,0x00dddd)
+		var b:DialButton = new DialButton("Freq",Math.round(Math.random()*128),-1.0,127.0,0x00dddd)
 		b.x = 60 + 25 * i
 		b.y = 50
 		addChild(b)
