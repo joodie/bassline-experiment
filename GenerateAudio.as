@@ -19,29 +19,39 @@ package {
 	public function GenerateAudio() {
 	    clock.frequency[0] = 8.0
 	    bassline.glider.frequency[0] = 8.0 / 2
+	    drawRoundedRectangle(graphics, 0, 0.5,0,0,440,175)
 
-	    drawRoundedRectangle(graphics, 0, 0.5,235,0,430,20)
+
 
 	    var label:TextField = new TextField()
+	    label.defaultTextFormat = titleTextFormat
+	    label.width = 195
+	    label.autoSize = TextFieldAutoSize.CENTER
+	    label.text = "Bassline"
+	    label.y = 5
+	    label.x = 10
+	    addChild(label)	    
+
+	    label = new TextField()
 	    label.defaultTextFormat = buttonTextFormat
 	    label.width = 195
 	    label.autoSize = TextFieldAutoSize.CENTER
 	    label.text = "Bassline experiment v1.0             (c) 2009 Joost Diepenmaat\njoost@zeekat.nl                                    http://joost.zeekat.nl"
-	    label.y = 0
+	    label.y = 50
 	    label.x = 240
 	    addChild(label)	    
 
 
 	    var button:ToggleButton = new ToggleButton("POW",false,0x700000,0xf00000)
 	    button.x = 10
-	    button.y = 00
+	    button.y = 50
 	    addChild(button)
 	    button.onOn = function():void { playing = true }
 	    button.onOff = function():void { playing = false }
 
 	    var dial:DialButton = new DialButton("SPD",20,0.5,20)
 	    dial.x = 35
-	    dial.y = 0
+	    dial.y = 50
 	    addChild(dial)
 	    dial.onChange = function(value:Number):void {
 		clock.frequency[0] = value
@@ -51,7 +61,7 @@ package {
 	    for (var i:int = 0; i < 16; i++) {
 		var b:DialButton = new DialButton("Freq",Math.round(Math.random()*128),-1.0,127.0,0x00dddd)
 		b.x = 35 + 25 * i
-		b.y = 50
+		b.y = 100
 		addChild(b)
 		b.onChange = (function(ii:int):Function {
 			return function(value:Number):void {
@@ -62,7 +72,7 @@ package {
 		)(i)
 		var tb:ToggleButton = new ToggleButton("Acc",false,0x700000,0xf00000)
 		tb.x = 35 + 25 * i
-		tb.y = 75
+		tb.y = 125
 		addChild(tb)
 		tb.onOn = (function(ii:int):Function {
 			return function():void {
@@ -79,7 +89,7 @@ package {
 
 		tb = new ToggleButton("Glide",false,0x700000,0xf00000)
 		tb.x = 35 + 25 * i
-		tb.y = 100
+		tb.y = 150
 		addChild(tb)
 		tb.onOn = (function(ii:int):Function {
 			return function():void {
@@ -97,7 +107,7 @@ package {
 
 		tb = new ToggleButton(i.toString(),false,0x007000,0x00f000,0)
 		tb.x = 35 + 25 * i
-		tb.y = 25
+		tb.y = 75
 		addChild(tb)
 		indicators.push(tb)
 	    }
@@ -105,7 +115,7 @@ package {
 
 	    var dial2:DialButton = new DialButton("FRQ",0.2,0.0,0.5)
 	    dial2.x = 60
-	    dial2.y = 0
+	    dial2.y = 50
 	    addChild(dial2)
 	    dial2.onChange = function(value:Number):void {
 		bassline.interpolateF.input[0] = value
@@ -113,7 +123,7 @@ package {
 
 	    var dial3:DialButton = new DialButton("Q",0.2,0.0,1.0)
 	    dial3.x = 85
-	    dial3.y = 0
+	    dial3.y = 50
 	    addChild(dial3)
 	    dial3.onChange = function(value:Number):void {
 		bassline.interpolateQ.input[0] = value
@@ -121,7 +131,7 @@ package {
 
 	    var dial4:DialButton = new DialButton("Decay",0.888,0.0,1.0)
 	    dial4.x = 110
-	    dial4.y = 0
+	    dial4.y = 50
 	    addChild(dial4)
 	    dial4.onChange = function(value:Number):void {
 		bassline.decay.decay[0] = 1.0 - Math.pow(1.0 - (0.5 + value /4),8)
@@ -129,7 +139,7 @@ package {
 
 	    var dialMod:DialButton = new DialButton("Mod",0.2,0.0,1.0)
 	    dialMod.x = 135
-	    dialMod.y = 0
+	    dialMod.y = 50
 	    addChild(dialMod)
 	    dialMod.onChange = function(value:Number):void {
 		bassline.envMod.inputC[0] = value
@@ -137,7 +147,7 @@ package {
 
 	    var dialAcc:DialButton = new DialButton("Acc",0.5,0.2,4.0)
 	    dialAcc.x = 160
-	    dialAcc.y = 0
+	    dialAcc.y = 50
 	    addChild(dialAcc)
 	    dialAcc.onChange = function(value:Number):void {
 		bassline.accentStrength.inputC[0] = value
@@ -145,7 +155,7 @@ package {
 
 	    var dialVol:DialButton = new DialButton("Vol",0.5,0.0,1.0)
 	    dialVol.x = 185
-	    dialVol.y = 0
+	    dialVol.y = 50
 	    addChild(dialVol)
 	    dialVol.onChange = function(value:Number):void {
 		bassline.volume.inputC[0] = value
@@ -153,14 +163,14 @@ package {
 
 
 	    vumeter.x = 10
-	    vumeter.y = 25
+	    vumeter.y = 75
 	    addChild(vumeter)
 
 	    
 	    var rbutton:ToggleButton = new ToggleButton("RAND",false,0x909090,0xf0f0f0)
 	    knobs.pop()
 	    rbutton.x = 210
-	    rbutton.y = 0
+	    rbutton.y = 50
 	    addChild(rbutton)
 	    rbutton.onOn = function():void { 
 		randomize();

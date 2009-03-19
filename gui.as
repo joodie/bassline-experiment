@@ -13,6 +13,12 @@ buttonTextFormat.color = 0xffffff
 buttonTextFormat.size = 5
 buttonTextFormat.bold = true
 
+var titleTextFormat:TextFormat = new TextFormat()
+titleTextFormat.font = "Verdana"
+titleTextFormat.color = 0xffffff
+titleTextFormat.size = 25
+titleTextFormat.bold = true
+
 var knobs:Array = []
 
 function drawRoundedRectangle(graphics:flash.display.Graphics,color:uint,alpha:Number,x1:Number,y1:Number,x2:Number,y2:Number,rounded:Number = 2.0):void {
