@@ -1,6 +1,7 @@
 package {
     import flash.display.Sprite
     import flash.text.TextField
+    import flash.text.TextFieldAutoSize
     import flash.display.SimpleButton
     import flash.media.Sound
     import flash.events.*
@@ -18,6 +19,17 @@ package {
 	public function GenerateAudio() {
 	    clock.frequency[0] = 8.0
 	    bassline.glider.frequency[0] = 8.0 / 2
+
+	    drawRoundedRectangle(graphics, 0, 1,235,0,430,20)
+
+	    var label:TextField = new TextField()
+	    label.defaultTextFormat = buttonTextFormat
+	    label.width = 1
+	    label.autoSize = TextFieldAutoSize.LEFT
+	    label.text = "Flash Bassline experiment 1 - joost@zeekat.nl\n(c) 2009 Joost Diepenmaat / Zeekat Softwareontwikkeling"
+	    label.y = 0
+	    label.x = 240
+	    addChild(label)	    
 
 
 	    var button:ToggleButton = new ToggleButton("POW",false,0x700000,0xf00000)
@@ -38,7 +50,7 @@ package {
 
 	    for (var i:int = 0; i < 16; i++) {
 		var b:DialButton = new DialButton("Freq",Math.round(Math.random()*128),-1.0,127.0,0x00dddd)
-		b.x = 60 + 25 * i
+		b.x = 35 + 25 * i
 		b.y = 50
 		addChild(b)
 		b.onChange = (function(ii:int):Function {
@@ -49,7 +61,7 @@ package {
 		    }
 		)(i)
 		var tb:ToggleButton = new ToggleButton("Acc",false,0x700000,0xf00000)
-		tb.x = 60 + 25 * i
+		tb.x = 35 + 25 * i
 		tb.y = 75
 		addChild(tb)
 		tb.onOn = (function(ii:int):Function {
@@ -66,7 +78,7 @@ package {
 		)(i)
 
 		tb = new ToggleButton("Glide",false,0x700000,0xf00000)
-		tb.x = 60 + 25 * i
+		tb.x = 35 + 25 * i
 		tb.y = 100
 		addChild(tb)
 		tb.onOn = (function(ii:int):Function {
@@ -84,7 +96,7 @@ package {
 
 
 		tb = new ToggleButton(i.toString(),false,0x007000,0x00f000,0)
-		tb.x = 60 + 25 * i
+		tb.x = 35 + 25 * i
 		tb.y = 25
 		addChild(tb)
 		indicators.push(tb)
@@ -144,7 +156,6 @@ package {
 	    vumeter.y = 25
 	    addChild(vumeter)
 
-	    addChild(debug)
 	    
 	    var rbutton:ToggleButton = new ToggleButton("RAND",false,0x909090,0xf0f0f0)
 	    knobs.pop()

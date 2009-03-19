@@ -45,15 +45,6 @@ function drawLabel(sprite:Sprite, text:String, color:uint=0xffffff,bgcolor:uint=
     label.x = (20.0 - label.textWidth) / 2.0 - 1.7
 }
 
-var debug:TextField = new TextField()
-debug.selectable = false
-debug.defaultTextFormat = buttonTextFormat
-debug.width = 1
-debug.autoSize = TextFieldAutoSize.LEFT
-debug.text = "Debug..."
-debug.y = 200
-
-
 
 
 class ToggleButton extends Sprite {
@@ -201,7 +192,7 @@ class DialButton extends Sprite {
 class VUMeter extends Sprite {
     private var indicator:Shape = new Shape()
     public function VUMeter() {
-	drawRoundedRectangle(graphics, 0x505050, 0.5, 0,0,20,120)
+	drawRoundedRectangle(graphics, 0, 0.5, 0,0,20,95)
 	addChild(indicator)
     }
 
@@ -209,7 +200,7 @@ class VUMeter extends Sprite {
 	indicator.graphics.clear()
 	var color:uint
 	val = Math.min(1,Math.max(0,Math.abs(val)))
-	if (val * 108 < 8) return;
+	if (val * 83 < 8) return;
 	if (val < 0.5) {
 	    color = 0xa0a000
 	}
@@ -219,6 +210,6 @@ class VUMeter extends Sprite {
 	else {
 	    color = 0xff0000
 	}
-	drawRoundedRectangle(indicator.graphics, color, 1, 4,8 + (1 - val) * 108,16,116)
+	drawRoundedRectangle(indicator.graphics, color, 1, 4,8 + (1 - val) * 83,16,91)
     }
 }
