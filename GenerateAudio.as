@@ -25,7 +25,7 @@ package {
 	    var label:TextField = new TextField()
 	    label.defaultTextFormat = buttonTextFormat
 	    label.width = 195
-	    label.autoSize = TextFieldAutoSize.RIGHT 
+	    label.autoSize = TextFieldAutoSize.CENTER
 	    label.text = "Bassline experiment v1.0             (c) 2009 Joost Diepenmaat\njoost@zeekat.nl                                    http://joost.zeekat.nl"
 	    label.y = 0
 	    label.x = 240
