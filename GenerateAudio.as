@@ -20,13 +20,13 @@ package {
 	    clock.frequency[0] = 8.0
 	    bassline.glider.frequency[0] = 8.0 / 2
 
-	    drawRoundedRectangle(graphics, 0, 1,235,0,430,20)
+	    drawRoundedRectangle(graphics, 0, 0.5,235,0,430,20)
 
 	    var label:TextField = new TextField()
 	    label.defaultTextFormat = buttonTextFormat
-	    label.width = 1
-	    label.autoSize = TextFieldAutoSize.LEFT
-	    label.text = "Flash Bassline experiment 1 - joost@zeekat.nl\n(c) 2009 Joost Diepenmaat / Zeekat Softwareontwikkeling"
+	    label.width = 195
+	    label.autoSize = TextFieldAutoSize.RIGHT 
+	    label.text = "Bassline experiment v1.0             (c) 2009 Joost Diepenmaat\njoost@zeekat.nl                                    http://joost.zeekat.nl"
 	    label.y = 0
 	    label.x = 240
 	    addChild(label)	    
