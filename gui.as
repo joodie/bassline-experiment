@@ -73,19 +73,22 @@ class ToggleButton extends Sprite {
 
 	state = startState
 
-
-
-	addEventListener(MouseEvent.CLICK, function():void { 
-		state = !state
-		updateState()
-		if (state && onOn != null) onOn()
-		if (!state && onOff != null) onOff()
+	addEventListener(MouseEvent.CLICK, function():void {
+		if (onOn != null && onOff != null) {
+		    setValue(!state)
+		}
 	    })
 
 	updateState()
 	addChild(onState)
 	addChild(offState)
-	
+    }
+
+    public function setValue(val:Boolean):void {
+	state = val
+	if (state && onOn != null) onOn()
+	if (!state && onOff != null) onOff()
+	updateState()
     }
 
     private function updateState():void {

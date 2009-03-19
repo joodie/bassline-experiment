@@ -14,19 +14,19 @@ class Oscillator {
     public var output:Vector.<Number> = buffer();
     public var frequency:Vector.<Number> = buffer();
     private var phase:Number = 0.0;
-
+    private var phaseStep:Number = 0.0;
     public function run(frames:uint):void {
 	for (var i:uint = 0; i < frames; i++) {
-	    var phaseStep:Number = this.frequency[i] / (SAMPLE_RATE / 2)
-	    if (this.phase < 1.0) {
-		this.output[i] = 0.5;
+	    phaseStep = frequency[i] / (SAMPLE_RATE / 2)
+	    if (phase < 1.0) {
+		output[i] = 0.5;
 	    }
 	    else {
-		this.output[i] = -0.5;
+		output[i] = -0.5;
 	    }
-	    this.phase += phaseStep;
-	    if (this.phase >= 2.0) {
-		this.phase -= 2.0;
+	    phase += phaseStep;
+	    if (phase >= 2.0) {
+		phase -= 2.0;
 	    }
 	}
     }
@@ -39,8 +39,10 @@ class Sequencer {
     public var note1:Vector.<Number> = buffer()
     public var note2:Vector.<Number> = buffer()
     public var note3:Vector.<Number> = buffer()
-    private var step:uint = 0;
+    public var triggerOut:Vector.<Number> = buffer()
+    public var step:uint = 0;
     private var trigHigh:Boolean = true
+    private var lastNote:Number = 0.0
     public function run(frames:uint):void {
 	for (var i:uint = 0; i < frames; i++) {
 	    if (trigger[i] > 0.5) {
@@ -54,22 +56,31 @@ class Sequencer {
 	    }
 	    switch (step) {
 		case 0: 
-		  this.output[i] = this.note0[0];
+		  this.output[i] = this.note0[0]
 		break
 		case 1: 
-		  this.output[i] = this.note1[0];
+		  this.output[i] = this.note1[0]
 		break
 		case 2: 
-		  this.output[i] = this.note2[0];
+		  this.output[i] = this.note2[0]
 		break
 		case 3: 
-		  this.output[i] = this.note3[0];
+		  this.output[i] = this.note3[0]
 		break
+	    }
+	    if (output[i] == 0.0) {
+		output[i] = lastNote
+		triggerOut[i] = 0.0
+	    }
+	    else {
+		lastNote = output[i]
+		triggerOut[i] = trigger[i]
 	    }
 	}
 		
     }
 }
+
 
 class Clock {
     public var output:Vector.<Number> = buffer()
@@ -166,6 +177,18 @@ class MultiplyCA {
 	}
     }
 }
+
+class AddAA {
+    public var input1:Vector.<Number> = buffer()
+    public var input2:Vector.<Number> = buffer()
+    public var output:Vector.<Number> = buffer()
+    public function run(frames:uint):void {
+	for (var i:uint = 0; i < frames; i++) {
+	    output[i] = input1[i] + input2[i]
+	}
+    }
+}
+
 
 class Interpolate {
     public var input:Vector.<Number> = buffer()
