@@ -13,7 +13,6 @@ buttonTextFormat.color = 0xffffff
 buttonTextFormat.size = 5
 buttonTextFormat.bold = true
 
-
 function drawRoundedRectangle(graphics:flash.display.Graphics,color:uint,alpha:Number,x1:Number,y1:Number,x2:Number,y2:Number,rounded:Number = 2.0):void {
     with (graphics) {
 	lineStyle(1,0)
@@ -43,6 +42,16 @@ function drawLabel(sprite:Sprite, text:String, color:uint=0xffffff,bgcolor:uint=
     sprite.addChild(label)
     label.x = (20.0 - label.textWidth) / 2.0 - 1.7
 }
+
+var debug:TextField = new TextField()
+debug.selectable = false
+debug.defaultTextFormat = buttonTextFormat
+debug.width = 1
+debug.autoSize = TextFieldAutoSize.LEFT
+debug.text = "Debug..."
+debug.y = 200
+
+
 
 
 class ToggleButton extends Sprite {
@@ -150,6 +159,8 @@ class DialButton extends Sprite {
 	    
 	    value = Math.min(max,Math.max(min,value - delta))
 	    if (onChange != null) onChange(value)
+
+
 	    updateDisplay()
 	}
 
