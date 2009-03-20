@@ -37,7 +37,7 @@ package {
 	    label.defaultTextFormat = buttonTextFormat
 	    label.width = 195
 	    label.autoSize = TextFieldAutoSize.CENTER
-	    label.text = "Bassline experiment v1.0             (c) 2009 Joost Diepenmaat\njoost@zeekat.nl                                    http://joost.zeekat.nl"
+	    label.text = "Bassline experiment v1.1             (c) 2009 Joost Diepenmaat\njoost@zeekat.nl                                    http://joost.zeekat.nl"
 	    label.y = 50
 	    label.x = 240
 	    addChild(label)	    
