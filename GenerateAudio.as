@@ -15,6 +15,30 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
+// I think as an introduction the following are reasonable:
+
+// http://www.kvraudio.com/wiki/?id=The+Basics+Of+Subtractive+Synthesis
+// http://www.geocities.com/SunsetStrip/Underground/2288/2ansynth.htm
+// http://www.geocities.com/sunsetstrip/studio/5821/analog.html
+
+// But basically, any text that explains "analogue" synthesizers should
+// work.
+
+// In my code, all the audio algorhitms are in modules.as - with each class
+// implementing a more or less complex building block (like the oscillator
+// and filters). Every time a block of audio data is generated, it runs
+// each module instance in the correct order, so, for example, the clock is
+// run first, then the sequencers (in the Bassline instance), then the
+// interpolator (for gliding notes), then the oscillator etc...
+
+// This is fairly standard, but the details are a more or
+// less optimized for actionscript. I don't really have the time to explain
+// in full, but if you're mainly interested in the way the data is
+// processed, the run() methods are the ones you need - the rest is just
+// setup (which modules are used and what outputs are plugged into what
+// inputs).
+
 package {
     import flash.display.Sprite
     import flash.text.TextField
